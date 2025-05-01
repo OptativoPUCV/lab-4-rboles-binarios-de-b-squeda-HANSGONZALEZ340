@@ -202,6 +202,29 @@ Pair * firstTreeMap(TreeMap * tree)
     return min->pair;
 }
 
-Pair * nextTreeMap(TreeMap * tree) {
-    return NULL;
+Pair * nextTreeMap(TreeMap * tree) 
+{
+    if (tree == NULL || tree->current == NULL) return NULL;
+
+    TreeNode * node = tree->current;
+
+    //si tiene hijo derecho, el siguiente es el minimo del subarbol derecho
+    if (node->right != NULL)
+    {
+        tree->current = minimum(node->right);
+        return tree->current->pair;
+    }
+
+    //si no ai hijo derecho, se busca el primer ancestro para el cual,
+    //este nodo esta en el subarbol izquierdo
+    TreeNode * parent = node->parent;
+    while(parent != NULL && parent->right == node)
+    {
+        node = parent;
+        parent = parent->parent;
+    }
+
+    tree->current = parent;
+    if (parent == NULL) return NULL;
+    return parent->pair;
 }
